@@ -51,7 +51,17 @@ def make_request(orig, corrected, t):
                                    'method': 'CorrDet'},
                              headers={'content-type': 'text/plain'})
     error = loads(response.content)['result'][1]
-    if (t != 'Vform' or error[2] != 'wrong verb form') and (t != 'Prep' or error[2] != 'preposition needs replacing'):
+    
+    type_msgs = {'Vform': 'wrong verb form',
+                 'Vt': 'wrong verb tense',
+                 'SVA': 'verb agreement',
+                 'Nn': 'wrong noun form',
+                 'Prep': 'preposition needs replacing',
+                #  'V0': '',
+                #  'Mec': '',
+                 }
+    
+    if t not in type_msgs or type_msgs[t] != error[2]:
         print(error)
 
 
