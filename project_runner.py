@@ -19,7 +19,7 @@ def parse_doc(doc):
             start_off = int(m.attrib['start_off'])
             end_off = int(m.attrib['end_off'])
             correction = paragraph[0][:start_off] + \
-                corr.strip() + paragraph[0][end_off + 1:]
+                corr.strip() + paragraph[0][end_off:]
             paragraph.append((correction, m.find('TYPE').text.strip()))
     return paragraphs
 
