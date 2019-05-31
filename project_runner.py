@@ -1,0 +1,41 @@
+from os.path import abspath, exists, join, normpath
+
+def parse_corpus(filename):
+  in_doc = False
+  in_p = False
+  paragraphs = []
+  
+  with open(filename) as f:
+    for line in f:
+      if line.startswith('<DOC'):
+        in_doc = True
+        paragraphs.append([])
+      elif line.startswith('</DOC>'):
+        in_doc = False
+      elif line.startswith('<P>'):
+        in_p = True
+      elif line.startswith('</P>'):
+        in_p = False
+      elif in_p:
+        paragraphs[-1].append([line])
+  print(paragraphs[0][0][0].replace(paragraphs[0][0][0][210:216], 'cause'))
+          
+
+# def load_cache():
+  
+
+# def save_cache(cache):
+
+# def memoized_parse_corpus(filename):
+#   if exists('cache.out'):
+#     return load_cache()
+#   else:
+#     cache = parse_corpus(filename)
+#     save_cache(cache)
+#     return cache
+
+def main():
+  filename = 'nucle3.2.sgml'
+  parse_corpus(filename)
+
+main()
