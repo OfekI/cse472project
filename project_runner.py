@@ -43,7 +43,7 @@ def parse_corpus(filename):
     return docs
 
 
-def make_request(orig, corrected):
+def make_request(orig, corrected, t):
     response = requests.post('http://localhost:8085',
                              json={'params': [orig, corrected],
                                    'id': 0,
@@ -51,7 +51,8 @@ def make_request(orig, corrected):
                                    'method': 'CorrDet'},
                              headers={'content-type': 'text/plain'})
     json = loads(response.content)
-    print(json['result'])
+    if t != 'Vform' or json['result'][1][2] != 'wrong verb form':
+        print(json['result'])
 
 
 def generate_sentence_pairs(sentences, limit):
@@ -64,7 +65,7 @@ def generate_sentence_pairs(sentences, limit):
 def main():
     filename = 'nucle3.2.sgml'
     sentences = parse_corpus(filename)
-    for (s1, s2, _) in generate_sentence_pairs(sentences, int(sys.argv[1]) if len(sys.argv) == 2 else 10):
-        make_request(s1, s2)
+    for (s1, s2, t) in generate_sentence_pairs(sentences, int(sys.argv[1]) if len(sys.argv) == 2 else 10):
+        make_request(s1, s2, t)
 
 main()
