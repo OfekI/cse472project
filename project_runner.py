@@ -50,9 +50,9 @@ def make_request(orig, corrected, t):
                                    'jsonrpc': '2.0',
                                    'method': 'CorrDet'},
                              headers={'content-type': 'text/plain'})
-    json = loads(response.content)
-    if t != 'Vform' or json['result'][1][2] != 'wrong verb form':
-        print(json['result'])
+    error = loads(response.content)['result'][1]
+    if (t != 'Vform' or error[2] != 'wrong verb form') and (t != 'Prep' or error[2] != 'preposition needs replacing'):
+        print(error)
 
 
 def generate_sentence_pairs(sentences, limit):
@@ -67,5 +67,6 @@ def main():
     sentences = parse_corpus(filename)
     for (s1, s2, t) in generate_sentence_pairs(sentences, int(sys.argv[1]) if len(sys.argv) == 2 else 10):
         make_request(s1, s2, t)
+
 
 main()
