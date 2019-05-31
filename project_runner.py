@@ -1,5 +1,6 @@
 from os.path import abspath, exists, join, normpath
 import requests
+from json import loads
 
 def parse_corpus(filename):
   in_doc = False
@@ -20,7 +21,6 @@ def parse_corpus(filename):
       elif in_p:
         paragraphs[-1].append([line])
   print(paragraphs[0][0][0].replace(paragraphs[0][0][0][210:216], 'cause'))
-          
 
 # def load_cache():
   
@@ -34,6 +34,17 @@ def parse_corpus(filename):
 #     cache = parse_corpus(filename)
 #     save_cache(cache)
 #     return cache
+
+def make_request(orig, corrected):
+  response = requests.post('http://localhost:8085',
+                           json={'params': [orig, corrected],
+                                 'id': 0,
+                                 'jsonrpc': '2.0',
+                                 'method': 'CorrDet'},
+                           headers={'content-type': 'text/plain'})
+  json = loads(response.content)
+  print(json['result'])
+  
 
 def main():
   filename = 'nucle3.2.sgml'
