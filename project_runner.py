@@ -30,32 +30,17 @@ def parse_corpus(filename):
     docs = []
 
     with open(filename) as f:
-        for i, line in enumerate(f):
+        in_doc = False
+        for line in f:
             if line.startswith('<DOC'):
-                # print(i)
+                in_doc = True
                 docs.append([])
-            docs[-1].append(line)
+            if in_doc:
+                docs[-1].append(line)
             if line.startswith('</DOC>'):
+                in_doc = False
                 docs[-1] = parse_doc(docs[-1])
-            # elif line.startswith('<P>'):
-            #   in_p = True
-            # elif line.startswith('</P>'):
-            #   in_p = False
-            # elif in_p:
-            #   paragraphs[-1].append([line])
-        print(docs[0][0])
-
-        # def load_cache():
-
-        # def save_cache(cache):
-
-        # def memoized_parse_corpus(filename):
-        #   if exists('cache.out'):
-        #     return load_cache()
-        #   else:
-        #     cache = parse_corpus(filename)
-        #     save_cache(cache)
-        #     return cache
+    return docs
 
 
 def make_request(orig, corrected):
@@ -70,10 +55,10 @@ def make_request(orig, corrected):
 
 
 def generate_sentence_pairs(sentences, limit):
-    [(s[0], *s[i])
-     for i in range(1, len(s))
-     for s in p
-     for p in sentences[0:limit]][0:limit]
+    return [(s[0], *s[i])
+            for p in sentences[0:limit]
+            for s in p
+            for i in range(1, len(s))][0:limit]
 
 
 def main():
