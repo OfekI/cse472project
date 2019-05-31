@@ -1,4 +1,5 @@
 from os.path import abspath, exists, join, normpath
+import requests
 
 def parse_corpus(filename):
   in_doc = False
@@ -37,5 +38,12 @@ def parse_corpus(filename):
 def main():
   filename = 'nucle3.2.sgml'
   parse_corpus(filename)
+  print(requests.post('http://localhost:8085',
+                json={'params': ['This sentence might have contain error.',
+                                 'This sentence might have some errors.'],
+                      'id': 0,
+                      'jsonrpc': '2.0',
+                      'method': 'CorrDet'},
+                headers={'content-type': 'text/plain'}))
 
 main()
