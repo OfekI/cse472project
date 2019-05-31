@@ -49,12 +49,6 @@ def make_request(orig, corrected):
 def main():
   filename = 'nucle3.2.sgml'
   parse_corpus(filename)
-  print(requests.post('http://localhost:8085',
-                json={'params': ['This sentence might have contain error.',
-                                 'This sentence might have some errors.'],
-                      'id': 0,
-                      'jsonrpc': '2.0',
-                      'method': 'CorrDet'},
-                headers={'content-type': 'text/plain'}).body)
+  make_request('This sentence might have contain error.', 'This sentence might have some errors.')
 
 main()
