@@ -44,6 +44,6 @@ def main():
                       'id': 0,
                       'jsonrpc': '2.0',
                       'method': 'CorrDet'},
-                headers={'content-type': 'text/plain'}))
+                headers={'content-type': 'text/plain'}).body)
 
 main()
