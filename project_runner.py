@@ -61,7 +61,7 @@ def make_request(orig, corrected, t):
                 #  'Mec': '',
                  }
     
-    if t != 'Others' or t not in type_msgs or type_msgs[t] != error[2]:
+    if t != 'Others' and (t not in type_msgs or type_msgs[t] != error[2]):
         print(error)
 
 
