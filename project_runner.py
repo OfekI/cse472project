@@ -3,6 +3,7 @@ from os.path import abspath, exists, join, normpath
 import xml.etree.ElementTree as et
 import requests
 from json import loads
+from contextlib import redirect_stdout
 
 
 def parse_doc(doc):
@@ -52,17 +53,17 @@ def make_request(orig, corrected, t):
                              headers={'content-type': 'text/plain'})
     error = loads(response.content)['result'][1]
     
-    type_msgs = {'Vform': 'wrong verb form',
-                 'Vt': 'wrong verb tense',
-                 'SVA': 'verb agreement',
-                 'Nn': 'wrong noun form',
-                 'Prep': 'preposition needs replacing',
-                #  'V0': '',
-                #  'Mec': '',
-                 }
+    # type_msgs = {'Vform': 'wrong verb form',
+    #              'Vt': 'wrong verb tense',
+    #              'SVA': 'verb agreement',
+    #              'Nn': 'wrong noun form',
+    #              'Prep': 'preposition needs replacing',
+    #             #  'V0': '',
+    #             #  'Mec': '',
+    #              }
     
-    if t != 'Others' and (t not in type_msgs or type_msgs[t] != error[2]):
-        print(error)
+    # if t != 'Others' and (t not in type_msgs or type_msgs[t] != error[2]):
+    return orig, corrected, error
 
 
 def generate_sentence_pairs(sentences, limit):
@@ -71,12 +72,25 @@ def generate_sentence_pairs(sentences, limit):
             for s in p
             for i in range(1, len(s))][0:limit]
 
+def output(lst):
+  with open('out.txt', 'w') as out:
+    with redirect_stdout(out):
+      for l in lst:
+        print('-'*100)
+        print(l[0][0])
+        print('-'*100)
+        for _, corrected, error in l:
+          print()
+          print(corrected)
+          print(error)
+        print('-'*100)
+        print()
 
 def main():
     filename = 'nucle3.2.sgml'
     sentences = parse_corpus(filename)
-    for (s1, s2, t) in generate_sentence_pairs(sentences, int(sys.argv[1]) if len(sys.argv) == 2 else 10):
-        make_request(s1, s2, t)
+    output([make_request(s[0], *s[i]) for i in range(1, len(s))] for s in p for p in sentences)
+    # for (s1, s2, t) in generate_sentence_pairs(sentences, int(sys.argv[1]) if len(sys.argv) == 2 else 10):
 
 
 main()
