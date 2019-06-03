@@ -89,7 +89,7 @@ def output(lst):
 def main():
     filename = 'nucle3.2.sgml'
     sentences = parse_corpus(filename)
-    output([make_request(s[0], *s[i]) for i in range(1, len(s))] for s in p for p in sentences)
+    output([make_request(s[0], *s[i]) for i in range(1, len(s))] for p in sentences for s in p)
     # for (s1, s2, t) in generate_sentence_pairs(sentences, int(sys.argv[1]) if len(sys.argv) == 2 else 10):
 
 
