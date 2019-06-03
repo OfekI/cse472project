@@ -76,15 +76,16 @@ def output(lst):
   with open('out.txt', 'w') as out:
     with redirect_stdout(out):
       for l in lst:
-        print('-'*100)
-        print(l[0][0])
-        print('-'*100)
-        for _, corrected, error in l:
+        if len(l) > 0:
+          print('-'*100)
+          print(l[0][0])
+          print('-'*100)
+          for _, corrected, error in l:
+            print()
+            print(corrected)
+            print(error)
+          print('-'*100)
           print()
-          print(corrected)
-          print(error)
-        print('-'*100)
-        print()
 
 def main():
     filename = 'nucle3.2.sgml'
